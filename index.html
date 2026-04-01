@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Min Copy & Print Order System</title>
+    <title>Min Copy & Print - Multi Order</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
@@ -11,37 +11,35 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
         body { background: var(--bg); color: #333; }
 
-        header { background: var(--primary); color: white; text-align: center; padding: 25px 10px; border-radius: 0 0 20px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        header { background: var(--primary); color: white; text-align: center; padding: 25px 10px; border-radius: 0 0 20px 20px; }
 
         .container { max-width: 500px; margin: auto; padding: 15px; }
         section { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         h2 { font-size: 1.1rem; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
 
-        .item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .item-card { border: 1px solid #eee; padding: 12px; border-radius: 12px; text-align: center; background: #fff; }
-        .item-card i { font-size: 1.8rem; color: #666; margin-bottom: 8px; }
-        .item-card.color i { color: #e67e22; }
-        .price { font-weight: bold; color: var(--primary); font-size: 0.9rem; }
-
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.85rem; color: #555; }
         input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; outline: none; }
         
-        .payment-choice { display: flex; gap: 10px; margin-top: 5px; }
-        .pay-option { flex: 1; text-align: center; padding: 10px; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 0.9rem; transition: 0.3s; }
-        input[type="radio"] { display: none; }
-        input[type="radio"]:checked + .pay-label { background: var(--primary); color: white; border-color: var(--primary); }
+        /* Add to Cart Button */
+        .btn-add { width: 100%; background: var(--secondary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+
+        /* Order Table */
+        .cart-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
+        .cart-table th { background: #eee; padding: 8px; text-align: left; }
+        .cart-table td { padding: 8px; border-bottom: 1px solid #eee; }
+        .btn-del { color: red; border: none; background: none; cursor: pointer; }
 
         .total-display { background: #fff3e0; padding: 15px; border-radius: 10px; text-align: center; margin: 15px 0; border: 1px dashed var(--primary); }
         #total-amount { font-size: 1.5rem; color: var(--primary); font-weight: bold; }
 
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .btn { border: none; padding: 15px; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; font-size: 0.9rem; }
         .btn-tg { background: #0088cc; }
         .btn-vb { background: #7360f2; }
 
         .qr-area { display: flex; gap: 15px; justify-content: center; margin-top: 10px; }
-        .qr-box img { width: 110px; height: 110px; border: 1px solid #eee; border-radius: 8px; margin-top: 5px; }
+        .qr-box img { width: 100px; height: 100px; border: 1px solid #eee; border-radius: 8px; }
 
         footer { text-align: center; padding: 20px; color: #999; font-size: 0.8rem; }
     </style>
@@ -50,118 +48,143 @@
 
 <header>
     <h1>Min Copy & Print</h1>
-    <p>မြန်ဆန်၊ သေချာ၊ စိတ်ချရသော ဝန်ဆောင်မှု</p>
+    <p>စိတ်တိုင်းကျ မှာယူနိုင်ပါသည်</p>
 </header>
 
 <div class="container">
     
     <section>
-        <h2><i class="fas fa-list-ul"></i> စျေးနှုန်းဇယား</h2>
-        <div class="item-grid">
-            <div class="item-card"><i class="fas fa-file-alt"></i><br>A4 (၁ ဖက်)<br><span class="price">၁၀၀ ကျပ်</span></div>
-            <div class="item-card"><i class="fas fa-copy"></i><br>A4 (၂ ဖက်)<br><span class="price">၁၅၀ ကျပ်</span></div>
-            <div class="item-card color"><i class="fas fa-file-signature"></i><br>A4 ကာလာ<br><span class="price">၅၀၀ ကျပ်</span></div>
-            <div class="item-card color"><i class="fas fa-image"></i><br>4x6 ဓာတ်ပုံ<br><span class="price">၁၀၀၀ ကျပ်</span></div>
+        <h2><i class="fas fa-cart-plus"></i> ပစ္စည်းရွေးချယ်ရန်</h2>
+        <div class="form-group">
+            <label>အမျိုးအမည်</label>
+            <select id="itemType">
+                <option value="A4 တစ်ဖက်" data-price="100">A4 တစ်ဖက် (၁၀၀ ကျပ်)</option>
+                <option value="A4 နှစ်ဖက်" data-price="150">A4 နှစ်ဖက် (၁၅၀ ကျပ်)</option>
+                <option value="A4 ကာလာ" data-price="500">A4 ကာလာ (၅၀၀ ကျပ်)</option>
+                <option value="4x6 ဓာတ်ပုံ" data-price="1000">4x6 ဓာတ်ပုံ (၁၀၀၀ ကျပ်)</option>
+            </select>
         </div>
+        <div class="form-group">
+            <label>အရေအတွက်</label>
+            <input type="number" id="qty" value="1" min="1">
+        </div>
+        <button class="btn-add" onclick="addToCart()"><i class="fas fa-plus"></i> စာရင်းထဲထည့်မည်</button>
     </section>
 
-    <section>
-        <h2><i class="fas fa-cart-plus"></i> အော်ဒါတင်မည်</h2>
-        <form id="orderForm">
-            <div class="form-group">
-                <label>Order No: <span id="displayOrderNo" style="color:var(--primary)"></span></label>
-            </div>
-            
-            <div class="form-group">
-                <label>အမျိုးအမည် ရွေးပါ</label>
-                <select id="itemType" onchange="calculate()">
-                    <option value="A4 တစ်ဖက်" data-price="100">A4 တစ်ဖက် (၁၀၀ ကျပ်)</option>
-                    <option value="A4 နှစ်ဖက်" data-price="150">A4 နှစ်ဖက် (၁၅၀ ကျပ်)</option>
-                    <option value="A4 ကာလာ" data-price="500">A4 ကာလာ (၅၀၀ ကျပ်)</option>
-                    <option value="4x6 ဓာတ်ပုံ" data-price="1000">4x6 ဓာတ်ပုံ (၁၀၀၀ ကျပ်)</option>
-                </select>
-            </div>
+    <section id="cartSection" style="display:none;">
+        <h2><i class="fas fa-list"></i> သင်မှာထားသောစာရင်း</h2>
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>အမျိုးအမည်</th>
+                    <th>ခုရေ</th>
+                    <th>ဈေး</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="cartBody"></tbody>
+        </table>
 
-            <div class="form-group">
-                <label>အရေအတွက် (ရွက်/ပုံ)</label>
-                <input type="number" id="qty" value="1" min="1" oninput="calculate()">
-            </div>
+        <div class="total-display">
+            <p>စုစုပေါင်း ကျသင့်ငွေ</p>
+            <div id="total-amount">၀ ကျပ်</div>
+        </div>
 
-            <div class="form-group">
-                <label>ငွေပေးချေမှုပုံစံ</label>
-                <div class="payment-choice">
-                    <label style="flex:1">
-                        <input type="radio" name="payMethod" value="ငွေသား (အိမ်ရောက်ပေး)" checked>
-                        <div class="pay-option pay-label">ငွေသား</div>
-                    </label>
-                    <label style="flex:1">
-                        <input type="radio" name="payMethod" value="Online Pay (KPay/Wave)">
-                        <div class="pay-option pay-label">Online Pay</div>
-                    </label>
-                </div>
-            </div>
+        <div class="form-group">
+            <label>ငွေပေးချေမှု</label>
+            <select id="payMethod">
+                <option value="ငွေသား (အိမ်ရောက်ပေး)">ငွေသား</option>
+                <option value="Online Pay (KPay/Wave)">Online Pay</option>
+            </select>
+        </div>
 
-            <div class="form-group">
-                <label>အသေးစိတ်မှတ်ချက်</label>
-                <textarea id="note" rows="2" placeholder="ဥပမာ - စာအုပ်ချုပ်ပေးပါ။"></textarea>
-            </div>
+        <div class="form-group">
+            <label>အသေးစိတ်မှတ်ချက်</label>
+            <textarea id="note" rows="2" placeholder="ဥပမာ - စာအုပ်ချုပ်ပေးပါ။"></textarea>
+        </div>
 
-            <div class="total-display">
-                <p>စုစုပေါင်းကျသင့်ငွေ</p>
-                <div id="total-amount">၁၀၀ ကျပ်</div>
-            </div>
-
-            <p style="font-size: 0.8rem; text-align: center; margin-bottom: 10px; color: #666;">ပို့လိုသည့် App ကို နှိပ်ပါ</p>
-            <div class="btn-group">
-                <button type="button" onclick="sendOrder('tg')" class="btn btn-tg"><i class="fab fa-telegram"></i> Telegram</button>
-                <button type="button" onclick="sendOrder('vb')" class="btn btn-vb"><i class="fab fa-viber"></i> Viber</button>
-            </div>
-        </form>
+        <p style="font-size: 0.8rem; text-align: center; margin-bottom: 10px; color: #666;">ပို့လိုသည့် App ကို နှိပ်ပါ</p>
+        <div class="btn-group">
+            <button onclick="sendOrder('tg')" class="btn btn-tg"><i class="fab fa-telegram"></i> Telegram</button>
+            <button onclick="sendOrder('vb')" class="btn btn-vb"><i class="fab fa-viber"></i> Viber</button>
+        </div>
     </section>
 
     <section>
         <h2><i class="fas fa-university"></i> Payment (09964563388)</h2>
         <div class="qr-area">
-            <div class="qr-box">KPay QR<br><img src="kpay-qr.jpg"></div>
-            <div class="qr-box">Wave QR<br><img src="wave-qr.jpg"></div>
+            <div class="qr-box">KPay<br><img src="kpay-qr.jpg"></div>
+            <div class="qr-box">Wave<br><img src="wave-qr.jpg"></div>
         </div>
     </section>
 </div>
 
-<footer>&copy; 2026 Min Copy & Print | 09964563388</footer>
+<footer>&copy; 2026 Min Copy & Print | Order No: <span id="orderNo"></span></footer>
 
 <script>
-    // Order နံပါတ် အလိုအလျောက်ထုတ်ခြင်း
-    const randNo = Math.floor(1000 + Math.random() * 9000);
-    const orderNo = "MIN-" + randNo;
-    document.getElementById('displayOrderNo').innerText = orderNo;
+    let cart = [];
+    const orderNo = "MIN-" + Math.floor(1000 + Math.random() * 9000);
+    document.getElementById('orderNo').innerText = orderNo;
 
-    function calculate() {
+    function addToCart() {
         const select = document.getElementById('itemType');
-        const price = select.options[select.selectedIndex].getAttribute('data-price');
-        const qty = document.getElementById('qty').value || 0;
-        const total = price * qty;
+        const name = select.value;
+        const price = parseInt(select.options[select.selectedIndex].getAttribute('data-price'));
+        const qty = parseInt(document.getElementById('qty').value);
+        
+        cart.push({ name, price, qty, subtotal: price * qty });
+        renderCart();
+        document.getElementById('cartSection').style.display = 'block';
+    }
+
+    function removeItem(index) {
+        cart.splice(index, 1);
+        renderCart();
+        if(cart.length === 0) document.getElementById('cartSection').style.display = 'none';
+    }
+
+    function renderCart() {
+        const body = document.getElementById('cartBody');
+        body.innerHTML = '';
+        let total = 0;
+
+        cart.forEach((item, index) => {
+            total += item.subtotal;
+            body.innerHTML += `
+                <tr>
+                    <td>${item.name}</td>
+                    <td>${item.qty}</td>
+                    <td>${item.subtotal.toLocaleString()}</td>
+                    <td><button class="btn-del" onclick="removeItem(${index})"><i class="fas fa-trash"></i></button></td>
+                </tr>`;
+        });
         document.getElementById('total-amount').innerText = total.toLocaleString() + " ကျပ်";
-        return { total, type: select.value, qty };
     }
 
     function sendOrder(platform) {
-        const data = calculate();
-        const note = document.getElementById('note').value || "မရှိပါ";
-        const payMethod = document.querySelector('input[name="payMethod"]:checked').value;
-        const time = new Date().toLocaleString(); 
+        if(cart.length === 0) return alert("စာရင်းထဲမှာ ဘာမှမရှိသေးပါ!");
+        
+        let itemsText = "";
+        let total = 0;
+        cart.forEach(item => {
+            itemsText += `• ${item.name} (${item.qty} ရွက်) = ${item.subtotal} KS%0A`;
+            total += item.subtotal;
+        });
 
-        // စလစ်ဘောင်ချာ ပုံစံ စာသားဒီဇိုင်း (Line Break ပါဝင်သည်)
+        const pay = document.getElementById('payMethod').value;
+        const note = document.getElementById('note').value || "မရှိပါ";
+        const time = new Date().toLocaleString();
+
         const voucher = 
 `🧾 **MIN COPY %26 PRINT**%0A` +
 `━━━━━━━━━━━━━━━━━━%0A` +
 `🆔 **Order No:** ${orderNo}%0A` +
 `📅 **Date:** ${time}%0A` +
 `━━━━━━━━━━━━━━━━━━%0A` +
-`📝 **Item:** ${data.type}%0A` +
-`🔢 **Qty:** ${data.qty}%0A` +
-`💰 **Total:** ${data.total.toLocaleString()} KS%0A` +
-`💳 **Pay:** ${payMethod}%0A` +
+`${itemsText}` +
+`━━━━━━━━━━━━━━━━━━%0A` +
+`💰 **Total:** ${total.toLocaleString()} KS%0A` +
+`💳 **Pay:** ${pay}%0A` +
 `💬 **Note:** ${note}%0A` +
 `━━━━━━━━━━━━━━━━━━%0A` +
 `🙏 အားပေးမှုကို ကျေးဇူးတင်ပါသည်!`;
