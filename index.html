@@ -50,7 +50,7 @@
 
 <header>
     <h1>Min Copy & Print</h1>
-    <p>သပ်ရပ်လှပသော ဘောင်ချာစနစ်ဖြင့်</p>
+    <p>မြန်ဆန်၊ သေချာ၊ စိတ်ချရသော ဝန်ဆောင်မှု</p>
 </header>
 
 <div class="container">
@@ -65,7 +65,7 @@
         </div>
     </section>
 
-    <section id="orderSection">
+    <section>
         <h2><i class="fas fa-cart-plus"></i> အော်ဒါတင်မည်</h2>
         <form id="orderForm">
             <div class="form-group">
@@ -131,6 +131,7 @@
 <footer>&copy; 2026 Min Copy & Print | 09964563388</footer>
 
 <script>
+    // Order နံပါတ် အလိုအလျောက်ထုတ်ခြင်း
     const randNo = Math.floor(1000 + Math.random() * 9000);
     const orderNo = "MIN-" + randNo;
     document.getElementById('displayOrderNo').innerText = orderNo;
@@ -150,20 +151,20 @@
         const payMethod = document.querySelector('input[name="payMethod"]:checked').value;
         const time = new Date().toLocaleString(); 
 
-        // စလစ်ဘောင်ချာ ပုံစံ စာသားဒီဇိုင်း
+        // စလစ်ဘောင်ချာ ပုံစံ စာသားဒီဇိုင်း (Line Break ပါဝင်သည်)
         const voucher = 
-`🧾 **MIN COPY %26 PRINT**
-━━━━━━━━━━━━━━━━━━
-🆔 Order No: ${orderNo}
-📅 Date: ${time}
-━━━━━━━━━━━━━━━━━━
-📝 Item: ${data.type}
-🔢 Qty: ${data.qty}
-💰 Total: ${data.total.toLocaleString()} KS
-💳 Pay: ${payMethod}
-💬 Note: ${note}
-━━━━━━━━━━━━━━━━━━
-🙏 အားပေးမှုကို ကျေးဇူးတင်ပါသည်!`;
+`🧾 **MIN COPY %26 PRINT**%0A` +
+`━━━━━━━━━━━━━━━━━━%0A` +
+`🆔 **Order No:** ${orderNo}%0A` +
+`📅 **Date:** ${time}%0A` +
+`━━━━━━━━━━━━━━━━━━%0A` +
+`📝 **Item:** ${data.type}%0A` +
+`🔢 **Qty:** ${data.qty}%0A` +
+`💰 **Total:** ${data.total.toLocaleString()} KS%0A` +
+`💳 **Pay:** ${payMethod}%0A` +
+`💬 **Note:** ${note}%0A` +
+`━━━━━━━━━━━━━━━━━━%0A` +
+`🙏 အားပေးမှုကို ကျေးဇူးတင်ပါသည်!`;
 
         if(platform === 'tg') {
             window.open(`https://t.me/+959964563388?text=${voucher}`, '_blank');
