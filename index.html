@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Min Copy & Print - Multi Order</title>
+    <title>Min Copy & Print - Professional Order System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
@@ -11,68 +11,84 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
         body { background: var(--bg); color: #333; }
 
-        header { background: var(--primary); color: white; text-align: center; padding: 25px 10px; border-radius: 0 0 20px 20px; }
+        header { background: var(--primary); color: white; text-align: center; padding: 25px 10px; border-radius: 0 0 20px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
         .container { max-width: 500px; margin: auto; padding: 15px; }
         section { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         h2 { font-size: 1.1rem; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
 
+        /* Form Styling */
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.85rem; color: #555; }
-        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; outline: none; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; outline: none; background: #fff; }
         
-        /* Add to Cart Button */
-        .btn-add { width: 100%; background: var(--secondary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-add { width: 100%; background: var(--secondary); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.3s; }
+        .btn-add:active { transform: scale(0.98); }
 
-        /* Order Table */
-        .cart-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
-        .cart-table th { background: #eee; padding: 8px; text-align: left; }
-        .cart-table td { padding: 8px; border-bottom: 1px solid #eee; }
-        .btn-del { color: red; border: none; background: none; cursor: pointer; }
+        /* Cart Table */
+        .cart-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem; }
+        .cart-table th { background: #f8f9fa; padding: 10px; text-align: left; border-bottom: 2px solid #eee; }
+        .cart-table td { padding: 10px; border-bottom: 1px solid #eee; }
+        .btn-del { color: #e74c3c; border: none; background: none; cursor: pointer; font-size: 1.1rem; }
 
         .total-display { background: #fff3e0; padding: 15px; border-radius: 10px; text-align: center; margin: 15px 0; border: 1px dashed var(--primary); }
-        #total-amount { font-size: 1.5rem; color: var(--primary); font-weight: bold; }
+        #total-amount { font-size: 1.6rem; color: var(--primary); font-weight: bold; }
 
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn { border: none; padding: 15px; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; font-size: 0.9rem; }
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .btn { border: none; padding: 15px; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; font-size: 0.95rem; }
         .btn-tg { background: #0088cc; }
         .btn-vb { background: #7360f2; }
 
         .qr-area { display: flex; gap: 15px; justify-content: center; margin-top: 10px; }
-        .qr-box img { width: 100px; height: 100px; border: 1px solid #eee; border-radius: 8px; }
+        .qr-box { text-align: center; font-size: 0.8rem; font-weight: bold; }
+        .qr-box img { width: 100px; height: 100px; border: 1px solid #eee; border-radius: 8px; margin-top: 5px; }
 
-        footer { text-align: center; padding: 20px; color: #999; font-size: 0.8rem; }
+        footer { text-align: center; padding: 20px; color: #999; font-size: 0.8rem; border-top: 1px solid #ddd; margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>Min Copy & Print</h1>
-    <p>စိတ်တိုင်းကျ မှာယူနိုင်ပါသည်</p>
+    <p>မြန်ဆန်၊ သေချာ၊ စိတ်တိုင်းကျ</p>
 </header>
 
 <div class="container">
     
     <section>
-        <h2><i class="fas fa-cart-plus"></i> ပစ္စည်းရွေးချယ်ရန်</h2>
+        <h2><i class="fas fa-print"></i> ဝန်ဆောင်မှုရွေးချယ်ရန်</h2>
         <div class="form-group">
             <label>အမျိုးအမည်</label>
             <select id="itemType">
-                <option value="A4 တစ်ဖက်" data-price="100">A4 တစ်ဖက် (၁၀၀ ကျပ်)</option>
-                <option value="A4 နှစ်ဖက်" data-price="150">A4 နှစ်ဖက် (၁၅၀ ကျပ်)</option>
-                <option value="A4 ကာလာ" data-price="500">A4 ကာလာ (၅၀၀ ကျပ်)</option>
-                <option value="4x6 ဓာတ်ပုံ" data-price="1000">4x6 ဓာတ်ပုံ (၁၀၀၀ ကျပ်)</option>
+                <optgroup label="A4 Size">
+                    <option value="A4 တစ်ဖက်" data-price="100">A4 တစ်ဖက် (၁၀၀ ကျပ်)</option>
+                    <option value="A4 ကျောကပ်" data-price="150">A4 ကျောကပ် (၁၅၀ ကျပ်)</option>
+                    <option value="A4 ကာလာ" data-price="500">A4 ကာလာ (၅၀၀ ကျပ်)</option>
+                    <option value="A4 Photo" data-price="3000">A4 Photo (၃၀၀၀ ကျပ်)</option>
+                    <option value="A4 ကတ်လောင်း" data-price="1000">A4 ကတ်လောင်း (၁၀၀၀ ကျပ်)</option>
+                </optgroup>
+                <optgroup label="Legal Size">
+                    <option value="Legal တစ်ဖက်" data-price="200">Legal တစ်ဖက် (၂၀၀ ကျပ်)</option>
+                    <option value="Legal ကျောကပ်" data-price="300">Legal ကျောကပ် (၃၀၀ ကျပ်)</option>
+                    <option value="Legal ကာလာ" data-price="1000">Legal ကာလာ (၁၀၀၀ ကျပ်)</option>
+                </optgroup>
+                <optgroup label="Photos & Passport">
+                    <option value="4x6 Photo" data-price="1500">4x6 Photo (၁၅၀၀ ကျပ်)</option>
+                    <option value="ကျောင်းသား Passport" data-price="300">ကျောင်းသား Passport (၃၀၀ ကျပ်)</option>
+                    <option value="ဘွဲ့ Passport" data-price="500">ဘွဲ့ Passport (၅၀၀ ကျပ်)</option>
+                    <option value="4x6 ကတ်လောင်း" data-price="500">4x6 ကတ်လောင်း (၅၀၀ ကျပ်)</option>
+                </optgroup>
             </select>
         </div>
         <div class="form-group">
             <label>အရေအတွက်</label>
             <input type="number" id="qty" value="1" min="1">
         </div>
-        <button class="btn-add" onclick="addToCart()"><i class="fas fa-plus"></i> စာရင်းထဲထည့်မည်</button>
+        <button class="btn-add" onclick="addToCart()"><i class="fas fa-cart-plus"></i> စာရင်းထဲထည့်မည်</button>
     </section>
 
     <section id="cartSection" style="display:none;">
-        <h2><i class="fas fa-list"></i> သင်မှာထားသောစာရင်း</h2>
+        <h2><i class="fas fa-shopping-basket"></i> မှာယူထားသောစာရင်း</h2>
         <table class="cart-table">
             <thead>
                 <tr>
@@ -91,19 +107,19 @@
         </div>
 
         <div class="form-group">
-            <label>ငွေပေးချေမှု</label>
+            <label>ငွေပေးချေမှုပုံစံ</label>
             <select id="payMethod">
-                <option value="ငွေသား (အိမ်ရောက်ပေး)">ငွေသား</option>
-                <option value="Online Pay (KPay/Wave)">Online Pay</option>
+                <option value="ငွေသား (အိမ်ရောက်ပေး)">ငွေသား (အိမ်ရောက်ပေး)</option>
+                <option value="Online Pay (KPay/Wave)">Online Pay (KPay/Wave)</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label>အသေးစိတ်မှတ်ချက်</label>
-            <textarea id="note" rows="2" placeholder="ဥပမာ - စာအုပ်ချုပ်ပေးပါ။"></textarea>
+            <label>မှတ်ချက် (ဥပမာ-စာအုပ်ချုပ်ပေးပါ)</label>
+            <textarea id="note" rows="2" placeholder="ဘာများ ထပ်ဖြည့်ချင်ပါသလဲ..."></textarea>
         </div>
 
-        <p style="font-size: 0.8rem; text-align: center; margin-bottom: 10px; color: #666;">ပို့လိုသည့် App ကို နှိပ်ပါ</p>
+        <p style="font-size: 0.8rem; text-align: center; margin-bottom: 10px; color: #d35400;">* အောက်ပါ App တစ်ခုခုကိုနှိပ်၍ အော်ဒါတင်ပါ *</p>
         <div class="btn-group">
             <button onclick="sendOrder('tg')" class="btn btn-tg"><i class="fab fa-telegram"></i> Telegram</button>
             <button onclick="sendOrder('vb')" class="btn btn-vb"><i class="fab fa-viber"></i> Viber</button>
@@ -119,7 +135,7 @@
     </section>
 </div>
 
-<footer>&copy; 2026 Min Copy & Print | Order No: <span id="orderNo"></span></footer>
+<footer>&copy; 2026 Min Copy & Print | Order No: <span id="orderNo" style="font-weight:bold"></span></footer>
 
 <script>
     let cart = [];
@@ -132,9 +148,14 @@
         const price = parseInt(select.options[select.selectedIndex].getAttribute('data-price'));
         const qty = parseInt(document.getElementById('qty').value);
         
+        if (qty < 1) return;
+
         cart.push({ name, price, qty, subtotal: price * qty });
         renderCart();
         document.getElementById('cartSection').style.display = 'block';
+        
+        // Reset qty back to 1 after adding
+        document.getElementById('qty').value = 1;
     }
 
     function removeItem(index) {
@@ -155,7 +176,7 @@
                     <td>${item.name}</td>
                     <td>${item.qty}</td>
                     <td>${item.subtotal.toLocaleString()}</td>
-                    <td><button class="btn-del" onclick="removeItem(${index})"><i class="fas fa-trash"></i></button></td>
+                    <td><button class="btn-del" onclick="removeItem(${index})"><i class="fas fa-times-circle"></i></button></td>
                 </tr>`;
         });
         document.getElementById('total-amount').innerText = total.toLocaleString() + " ကျပ်";
@@ -167,7 +188,7 @@
         let itemsText = "";
         let total = 0;
         cart.forEach(item => {
-            itemsText += `• ${item.name} (${item.qty} ရွက်) = ${item.subtotal} KS%0A`;
+            itemsText += `• ${item.name} (${item.qty} ခု) = ${item.subtotal.toLocaleString()} KS%0A`;
             total += item.subtotal;
         });
 
@@ -187,7 +208,7 @@
 `💳 **Pay:** ${pay}%0A` +
 `💬 **Note:** ${note}%0A` +
 `━━━━━━━━━━━━━━━━━━%0A` +
-`🙏 အားပေးမှုကို ကျေးဇူးတင်ပါသည်!`;
+`🙏 အားပေးမှုကို အထူးကျေးဇူးတင်ပါသည်!`;
 
         if(platform === 'tg') {
             window.open(`https://t.me/+959964563388?text=${voucher}`, '_blank');
